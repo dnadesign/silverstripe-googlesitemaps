@@ -44,6 +44,11 @@ class GoogleSitemapSiteTreeExtension extends GoogleSitemapExtension
         );
         $message .= "</p>";
 
+        $fields->removeByName([
+            'Priority',
+            'GoogleSitemap'
+        ]); // Prevents duplicate fields in some circumstances
+
         $tabset->push(new Tab(
             'GoogleSitemap',
             _t('GoogleSitemaps.TABGOOGLESITEMAP', 'Google Sitemap'),
@@ -159,10 +164,10 @@ class GoogleSitemapSiteTreeExtension extends GoogleSitemapExtension
                 }
             }
         }
-        
+
         foreach ($this->owner->manyMany() as $field => $type) {
             $image = false;
-    
+
             if (is_array($type) && isset($type['through'])) {
                 if (singleton($type['through']) instanceof Image) {
                     $image = true;
@@ -171,7 +176,7 @@ class GoogleSitemapSiteTreeExtension extends GoogleSitemapExtension
                 if (strpos($type, '.') !== false) {
                     $type = explode('.', $type)[0];
                 }
-            
+
                 if (singleton($type) instanceof Image) {
                     $image = true;
                 }
